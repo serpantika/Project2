@@ -25,9 +25,9 @@ class Scrapper:
                 categoryUrl = 'http://books.toscrape.com/' + li.find('a')['href']
                 self.categories.append(Category(categoryName, categoryUrl))
                 self.getBooksFromCategories(categoryName, categoryUrl)
-
+                category = Category(categoryName, categoryUrl)
+                category.lanceCsv()
     def getBooksFromCategories(self, categoryName, categoryUrl):
-        livretotaux = 0
         livrescan = 0
         self.booksurl = []
         i = 2
@@ -36,7 +36,7 @@ class Scrapper:
         url = categoryUrlDeux
         reponse = requests.get(url)
         while reponse.ok:
-            self.findH3(reponse, livretotaux, livrescan, categoryName, categoryUrl)
+            self.findH3(reponse, livrescan, categoryName, categoryUrl)
             i += 1
             print(categoryUrl)
             categoryUrlDeux = categoryUrl
@@ -48,9 +48,9 @@ class Scrapper:
             print(categoryUrl)
             reponse = requests.get(url)
             if reponse.ok:
-                self.findH3(reponse, livretotaux, livrescan, categoryName, categoryUrl)
+                self.findH3(reponse, livrescan, categoryName, categoryUrl)
 
-    def getDataFromBook(self, product_page_url, livretotaux, livrescan, categoryName, categoryUrl):
+    def getDataFromBook(self, product_page_url, livrescan, categoryName, categoryUrl):
         livrescan += 1
         print(livrescan)
         print(product_page_url)
@@ -66,7 +66,7 @@ class Scrapper:
             img = soup.find('img')
             image_url = 'http://books.toscrape.com/' + str(img['src'])
             image_url = image_url.replace('../../', '')
-            urllib.request.urlretrieve(str(image_url), str(livretotaux) + ".jpg")
+            urllib.request.urlretrieve(str(image_url), str(title) + ".jpg")
 
             product_description = soup.find_all('p')[3].text.strip()
 
@@ -100,7 +100,7 @@ class Scrapper:
             self.books.append(book)
             category.addBook(book)
 
-    def findH3(self, reponse, livretotaux, livrescan, categoryName, categoryUrl):
+    def findH3(self, reponse, livrescan, categoryName, categoryUrl):
         soup = BeautifulSoup(reponse.text, 'html.parser')
         h3s = soup.findAll('h3')
         for h3 in h3s:
@@ -108,4 +108,4 @@ class Scrapper:
             product_page_url = a['href']
             product_page_url = product_page_url.replace("../../..", "")
             product_page_url = 'http://books.toscrape.com/catalogue' + product_page_url
-            self.getDataFromBook(product_page_url, livretotaux, livrescan, categoryName, categoryUrl)
+            self.getDataFromBook(product_page_url, livrescan, categoryName, categoryUrl)

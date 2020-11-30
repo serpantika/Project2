@@ -1,4 +1,4 @@
-
+from create_csv import Createcsv
 
 
 class Category:
@@ -17,4 +17,7 @@ class Category:
               book.number_available, "parlant de", book.product_description,
               "et le lien d'image", book.image_url)
         self.books.append(book)
-        print(self.books)
+
+    def lanceCsv(self):
+        liste = Createcsv(self.name)
+        liste.TEST(self.books)
