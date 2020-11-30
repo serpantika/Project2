@@ -8,7 +8,7 @@ class Createcsv:
         print("création du csv :", self.name)
 
     def TEST(self, book):
-        with open(self.name + ".csv", "w", encoding="ISO-8859-1") as csvfile:
-            writer = csv.writer(csvfile)
+        with open("données/" + self.name + "/" + self.name + ".csv", "w") as csvfile:
+            writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
             for i in range(int(len(book))):
                 writer.writerow(book[i])

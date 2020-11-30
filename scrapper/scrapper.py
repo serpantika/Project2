@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 from book import Book
 from category import Category
-
+import os
 
 class Scrapper:
 
@@ -23,10 +23,16 @@ class Scrapper:
             for li in books_category:
                 categoryName = li.find("a")["href"].split('/')[3]
                 categoryUrl = 'http://books.toscrape.com/' + li.find('a')['href']
+
+                if not os.path.exists("données/" + str(categoryName)):
+                    os.makedirs("données/" + str(categoryName))
+                if not os.path.exists("données/" + str(categoryName + "/image")):
+                    os.makedirs("données/" + str(categoryName + '/image'))
                 self.categories.append(Category(categoryName, categoryUrl))
                 self.getBooksFromCategories(categoryName, categoryUrl)
                 category = Category(categoryName, categoryUrl)
                 category.lanceCsv()
+
     def getBooksFromCategories(self, categoryName, categoryUrl):
         livrescan = 0
         self.booksurl = []
@@ -66,7 +72,12 @@ class Scrapper:
             img = soup.find('img')
             image_url = 'http://books.toscrape.com/' + str(img['src'])
             image_url = image_url.replace('../../', '')
-            urllib.request.urlretrieve(str(image_url), str(title) + ".jpg")
+
+            image = img['alt']
+            image = image.replace(":", " ")
+            image = image.replace("/", " ")
+            # image = image.replace(r"\", " ")
+            urllib.request.urlretrieve(str(image_url), 'données/' + str(categoryName) + '/image/' + str(image) + ".jpg")
 
             product_description = soup.find_all('p')[3].text.strip()
 
