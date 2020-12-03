@@ -73,6 +73,7 @@ class Scrapper:
             image = image.replace('"', " ")
             image = image.replace('...', " ")
             image = image.replace('*', " ")
+            image = image.replace('?', " ")
             print(image)
             urllib.request.urlretrieve(str(image_url), 'données/' + str(categoryName) + '/image/' + str(image) + ".jpg")
 
@@ -103,7 +104,7 @@ class Scrapper:
                 review_rating = "Five star"
             book = Book(title, price_including_tax, price_excluding_tax,
                                   product_page_url, upc, number_available, product_description,
-                                  review_rating, image_url)
+                                  review_rating, image_url, image)
             category.addBook(book)
 
     def findH3(self, reponse, categoryName, category):
