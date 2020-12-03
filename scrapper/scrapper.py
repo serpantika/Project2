@@ -9,7 +9,6 @@ class Scrapper:
 
     def __init__(self):
         self.categories = []
-        self.books = []
         print("Le scrapper est lancé !")
 
     def getCategories(self):
@@ -23,18 +22,16 @@ class Scrapper:
             for li in books_category:
                 categoryName = li.find("a")["href"].split('/')[3]
                 categoryUrl = 'http://books.toscrape.com/' + li.find('a')['href']
-
+                category = Category(categoryName, categoryUrl)
                 if not os.path.exists("données/" + str(categoryName)):
                     os.makedirs("données/" + str(categoryName))
                 if not os.path.exists("données/" + str(categoryName + "/image")):
                     os.makedirs("données/" + str(categoryName + '/image'))
                 self.categories.append(Category(categoryName, categoryUrl))
-                self.getBooksFromCategories(categoryName, categoryUrl)
-                category = Category(categoryName, categoryUrl)
+                self.getBooksFromCategories(categoryName, categoryUrl, category)
                 category.lanceCsv()
 
-    def getBooksFromCategories(self, categoryName, categoryUrl):
-        livrescan = 0
+    def getBooksFromCategories(self, categoryName, categoryUrl, category):
         self.booksurl = []
         i = 2
         categoryUrlDeux = categoryUrl
@@ -42,7 +39,7 @@ class Scrapper:
         url = categoryUrlDeux
         reponse = requests.get(url)
         while reponse.ok:
-            self.findH3(reponse, livrescan, categoryName, categoryUrl)
+            self.findH3(reponse, categoryName, category)
             i += 1
             print(categoryUrl)
             categoryUrlDeux = categoryUrl
@@ -54,15 +51,12 @@ class Scrapper:
             print(categoryUrl)
             reponse = requests.get(url)
             if reponse.ok:
-                self.findH3(reponse, livrescan, categoryName, categoryUrl)
+                self.findH3(reponse, categoryName, category)
 
-    def getDataFromBook(self, product_page_url, livrescan, categoryName, categoryUrl):
-        livrescan += 1
-        print(livrescan)
+    def getDataFromBook(self, product_page_url, categoryName, category):
         print(product_page_url)
         url = str(product_page_url)
         reponse = requests.get(url)
-        reponse.encoding = "utf-8"
         if reponse.ok:
             soup = BeautifulSoup(reponse.text, 'html.parser')
 
@@ -76,7 +70,10 @@ class Scrapper:
             image = img['alt']
             image = image.replace(":", " ")
             image = image.replace("/", " ")
-            # image = image.replace(r"\", " ")
+            image = image.replace('"', " ")
+            image = image.replace('...', " ")
+            image = image.replace('*', " ")
+            print(image)
             urllib.request.urlretrieve(str(image_url), 'données/' + str(categoryName) + '/image/' + str(image) + ".jpg")
 
             product_description = soup.find_all('p')[3].text.strip()
@@ -104,14 +101,12 @@ class Scrapper:
                 review_rating = "Four star"
             else:
                 review_rating = "Five star"
-            category = Category(categoryName, categoryUrl)
             book = Book(title, price_including_tax, price_excluding_tax,
                                   product_page_url, upc, number_available, product_description,
                                   review_rating, image_url)
-            self.books.append(book)
             category.addBook(book)
 
-    def findH3(self, reponse, livrescan, categoryName, categoryUrl):
+    def findH3(self, reponse, categoryName, category):
         soup = BeautifulSoup(reponse.text, 'html.parser')
         h3s = soup.findAll('h3')
         for h3 in h3s:
@@ -119,4 +114,4 @@ class Scrapper:
             product_page_url = a['href']
             product_page_url = product_page_url.replace("../../..", "")
             product_page_url = 'http://books.toscrape.com/catalogue' + product_page_url
-            self.getDataFromBook(product_page_url, livrescan, categoryName, categoryUrl)
+            self.getDataFromBook(product_page_url, categoryName, category)

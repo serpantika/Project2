@@ -17,7 +17,8 @@ class Category:
               book.number_available, "parlant de", book.product_description,
               "et le lien d'image", book.image_url)
         self.books.append(book)
-
+        print(len(self.books))
     def lanceCsv(self):
         liste = Createcsv(self.name)
         liste.TEST(self.books)
+        print(len(self.books))
