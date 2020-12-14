@@ -13,8 +13,8 @@ class Book:
         self.review_rating = review_rating
         self.image_url = image_url
         self.image = image
+
     def booktocsv(self):
         return (self.title + ";" + self.price_including_tax + ";" + self.price_excluding_tax + ";" +
-                 self.product_page_url + ";" + self.upc + ";" + self.number_available + ";"
-                 + self.product_description + ";" +
-                 self.review_rating + ";" + self.image_url + ";" + self.image)
+                self.product_page_url + ";" + self.upc + ";" + self.number_available + ";" +
+                self.review_rating + ";" + self.image_url + ";" + self.image + ";" + self.product_description)

@@ -1,5 +1,5 @@
 import csv
-from book import Book
+
 
 class Createcsv:
 
@@ -8,10 +8,9 @@ class Createcsv:
         print("création du csv :", self.name)
 
     def TEST(self, book):
-        print(len(book))
-        with open("données/" + self.name + "/" + self.name + ".csv", "w", encoding = "UTF-8") as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow("title; price_including_tax; price_excluding_tax;product_page_url; upc;"
-                            " number_available; product_description; review_rating; image_url; image")
+        with open("données/" + self.name + "/" + self.name + ".csv", "w", encoding="UTF-8") as csvfile:
+            writer = csv.writer(csvfile, delimiter=" ", quotechar=" ", quoting=csv.QUOTE_MINIMAL)
+            writer.writerow(["title; price_including_tax; price_excluding_tax; product_page_url; upc;"
+                            " number_available; review_rating; image_url; image; product_description"])
             for i in range(int(len(book))):
-                writer.writerow(book[i].booktocsv())
+                writer.writerow([book[i].booktocsv()])

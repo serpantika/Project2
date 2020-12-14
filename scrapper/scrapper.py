@@ -16,7 +16,7 @@ class Scrapper:
         response = requests.get(url)
 
         if response.ok:
-            soup = BeautifulSoup(response.text, features="html.parser")
+            soup = BeautifulSoup(response.content, features="html.parser")
             books_category = soup.find("ul", {"class": "nav nav-list"}).find_all("li")[1:]
 
             for li in books_category:
@@ -41,24 +41,21 @@ class Scrapper:
         while reponse.ok:
             self.findH3(reponse, categoryName, category)
             i += 1
-            print(categoryUrl)
             categoryUrlDeux = categoryUrl
             categoryUrlDeux = categoryUrlDeux.replace('index.html', 'page-') + str(i) + ".html"
             url = categoryUrlDeux
             reponse = requests.get(url)
         else:
             url = categoryUrl
-            print(categoryUrl)
             reponse = requests.get(url)
             if reponse.ok:
                 self.findH3(reponse, categoryName, category)
 
     def getDataFromBook(self, product_page_url, categoryName, category):
-        print(product_page_url)
         url = str(product_page_url)
         reponse = requests.get(url)
         if reponse.ok:
-            soup = BeautifulSoup(reponse.text, 'html.parser')
+            soup = BeautifulSoup(reponse.content, 'html.parser')
 
             title = soup.find('title').text.strip()
             title = title.replace(' | Books to Scrape - Sandbox', '')
@@ -74,11 +71,9 @@ class Scrapper:
             image = image.replace('...', " ")
             image = image.replace('*', " ")
             image = image.replace('?', " ")
-            print(image)
             urllib.request.urlretrieve(str(image_url), 'données/' + str(categoryName) + '/image/' + str(image) + ".jpg")
 
             product_description = soup.find_all('p')[3].text.strip()
-
             upc = soup.find_all('td')[0].text.strip()
 
             price_including_tax = soup.find_all('td')[2].text.strip()
@@ -103,12 +98,12 @@ class Scrapper:
             else:
                 review_rating = "Five star"
             book = Book(title, price_including_tax, price_excluding_tax,
-                                  product_page_url, upc, number_available, product_description,
-                                  review_rating, image_url, image)
+                        product_page_url, upc, number_available, product_description,
+                        review_rating, image_url, image)
             category.addBook(book)
 
     def findH3(self, reponse, categoryName, category):
-        soup = BeautifulSoup(reponse.text, 'html.parser')
+        soup = BeautifulSoup(reponse.content, 'html.parser')
         h3s = soup.findAll('h3')
         for h3 in h3s:
             a = h3.find('a')
