@@ -47,6 +47,12 @@ Pour éteindre l'environnement:
 
 
 
+# Codé avec Pycharm
+
+#Auteur : 
+Giroud Vivien 
+
+
 
 
 
