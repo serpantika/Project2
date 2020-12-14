@@ -12,8 +12,9 @@ Pour mettre à jour pip :
 
 Une fois pip à jour, nous pouvons maintenant installer virtualenv qui nous servira à créer notre environnement virtuel
 en utilisant :
->py -m pip install --user virtualenv
-
+>py -m pip install --user virtualenv  
+ 
+(***pour MacOS et Linux remplacer py par python3***)
 ## - Création de l'environnement virtuel
 
 Choisir l'emplacement où vous voulez créer votre environnement virtuel grace à la commande **cd** plus le chemin
@@ -22,7 +23,10 @@ nom que vous voulez donner à votre dossier.
 >py -m venv env
 
 Pour lancer l'environnement:
->.\env\Scripts\activate
+>.\env\Scripts\activate  
+ 
+(***Pour MacOS et Linux :***)
+>source env/bin/activate
 
 Pour éteindre l'environnement:
 >deactivate
