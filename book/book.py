@@ -15,6 +15,6 @@ class Book:
         self.image = image
 
     def booktocsv(self):
-        return (self.title + ";" + self.price_including_tax + ";" + self.price_excluding_tax + ";" +
-                self.product_page_url + ";" + self.upc + ";" + self.number_available + ";" +
-                self.review_rating + ";" + self.image_url + ";" + self.image + ";" + self.product_description)
+        return (self.title + ";" + self.image + ";" + self.upc + ";" + self.price_including_tax + ";" +
+                self.price_excluding_tax + ";" + self.number_available + ";" + self.review_rating + ";"
+                + self.product_page_url + ";" + self.image_url + ";" + self.product_description)
