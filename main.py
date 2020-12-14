@@ -1,7 +1,7 @@
 from scrapper import Scrapper
-
-myScrapper = Scrapper()
-myScrapper.getCategories()
+if __name__ == "__main__":
+    myScrapper = Scrapper()
+    myScrapper.getCategories()
 
 
 
