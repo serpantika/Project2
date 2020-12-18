@@ -7,7 +7,7 @@ class Createcsv:
         self.name = name
         print("création du csv :", self.name)
 
-    def TEST(self, book):
+    def newcsv(self, book):
         with open("données/" + self.name + "/" + self.name + ".csv", "w", encoding="UTF-8") as csvfile:
             writer = csv.writer(csvfile, delimiter=" ", quotechar=" ", quoting=csv.QUOTE_MINIMAL)
             writer.writerow(["title; image; upc; price_including_tax; price_excluding_tax;"

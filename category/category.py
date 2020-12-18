@@ -13,4 +13,4 @@ class Category:
 
     def lanceCsv(self):
         liste = Createcsv(self.name)
-        liste.TEST(self.books)
+        liste.newcsv(self.books)
